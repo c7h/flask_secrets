@@ -15,14 +15,16 @@ ENV MAIL_PASSWORD passwordhere
 ENV DATABASE_URI 'sqlite:////tmp/database.db'
 
 RUN apk --no-cache add --virtual build-deps build-base python3-dev curl netcat-openbsd \
- && apk --no-cache add --virtual runtime-deps python3 libpq ca-certificates \
+ && apk --no-cache add --virtual runtime-deps python3 libpq ca-certificates\
  && apk --no-cache upgrade \
  && curl -O https://bootstrap.pypa.io/get-pip.py \
  && python3 get-pip.py \
  && pip3 install -r requirements.txt \
  && apk del --purge build-deps \
- && python3 bootstrap.py
+ && python3 bootstrap.py \
+ && pip3 install gunicorn
 
-ENTRYPOINT ["python"]
+EXPOSE 5000
 
-CMD ["flask run"]
+# CMD ["flask run"]
+CMD ["/usr/bin/gunicorn", "--config", "gunicorn_config.py", "server:app"]
