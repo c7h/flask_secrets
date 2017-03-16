@@ -7,28 +7,30 @@ It provides the following endpoints:
 
 ## create users: 
 
-```POST /users```
- and
- ```{"username": "foo_bar@example.com",
- "password": "mysecretpassword"}```
+`POST /users`
+
+ ```
+ {"username": "foo_bar@example.com",
+ "password": "mysecretpassword"}
+ ```
 
 You will receive an email with an authorization url. Only authorized users will be able to log in!
 
 ## validate user account
-``` GET POST PATCH /users/<int:user_id>/validation/<string:validation_token>```
+`GET POST PATCH /users/<int:user_id>/validation/<string:validation_token>`
 
 Validate the email address for a user account. This can be done by a GET, POST or PATCH method. Note that this function is idempotent.
 
 ## get users details:
 
-```GET /users/<int:user_id>```
+`GET /users/<int:user_id>`
 
 Returns the name and id for a given user id. 
 You need to be logged in to see users details.
 
 
 ## create secrets:
-```POST /secrets```
+`POST /secrets`
 
 ```
 {"secret": "this is a super secret message"}
@@ -39,7 +41,7 @@ Create a secret message. Be aware that your username will be linked to this ress
 
 ## list all secrets
 
-```GET /secrets```
+`GET /secrets`
 
 returns a list of all stored secrets:
 
@@ -59,4 +61,5 @@ returns a list of all stored secrets:
   ]
 }
 ```
+
 You'll need to be logged in to use this endpoint.
