@@ -119,13 +119,14 @@ class UserListRessource(Resource):
 
 		try:
 			mail.send(validation_mail)
-		except Exception as e:  # FIXME: catch more specific exception
+		except Exception as e:
 			# remove user from database
-			db.session.revert()
+			db.session.delete(user)
 			db.session.commit()
 			raise e
 
-		return 200
+		return {"result": "ok",
+				"id": user.id}, 201
 
 
 class UserResource(Resource):
@@ -137,8 +138,8 @@ class UserResource(Resource):
 	def get(self, user_id):
 		"""
 		Show details for user. You need to be logged in for that
-		:param user_id:
-		:return:
+		:param user_id: id of the user
+		:return: 200
 		"""
 
 		user = User.query.filter_by(id=user_id).first()
@@ -199,7 +200,7 @@ class SecretsListResource(Resource):
 	def post(self):
 		"""
 		create a new secret
-		:return:
+		:return: 201 on success
 		"""
 		args = self.parser.parse_args()
 		secret = args.get('secret')
@@ -219,7 +220,7 @@ def verify_password(username, password):
 	used by the httpauth module to validate passwords for users.
 	:param username: username to check
 	:param password: password to validate
-	:return:
+	:return: True, if correct
 	"""
 	user = User.query.filter_by(username=username).first()
 	if not user or not user.verify_password(password):
