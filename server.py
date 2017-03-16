@@ -218,6 +218,7 @@ class SecretsListResource(Resource):
 def verify_password(username, password):
 	"""
 	used by the httpauth module to validate passwords for users.
+	Only authenticated users can login.
 	:param username: username to check
 	:param password: password to validate
 	:return: True, if correct
@@ -226,7 +227,7 @@ def verify_password(username, password):
 	if not user or not user.verify_password(password):
 		return False
 	g.user = user
-	return True
+	return user.validated
 
 
 # register endpoints
